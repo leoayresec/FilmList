@@ -1,17 +1,16 @@
 import Home from '../pages/Home'
+import Detalhe from '../pages/Detalhe'
 import {
   createAppContainer,
-  createStackNavigator,
   createSwitchNavigator
 } from 'react-navigation';
-import {  createMaterialTopTabNavigator,
-} from 'react-navigation-tabs'
 
-const TabNavigator = createMaterialTopTabNavigator(
+
+const TabNavigator = createSwitchNavigator(
     {
       Home: Home,
+      Detalhe:Detalhe
     },{
-    tabBarPosition: 'bottom'
   }
     )
 
