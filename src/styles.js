@@ -21,7 +21,7 @@ export const Input = styled.TextInput`
     padding-top:10px
 `;
 export const Header = styled.View`
-background-color: #98b7CC;
+background-color:  ${props => props.backgroundColor};
 width:500px;
 height:75px;
 `;

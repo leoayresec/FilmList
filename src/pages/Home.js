@@ -130,7 +130,7 @@ export default class Home extends React.PureComponent {
 
         return (
             <Container>
-                <Header>
+                <Header backgroundColor="#98b7CC">
                 </Header>
                 <Tabs style={{ backgroundColor: "#466A84" }}>
                     <Tab heading={<TabHeading style={{ backgroundColor: "#466A84",alignItems:'center' }}>

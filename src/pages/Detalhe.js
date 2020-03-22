@@ -1,7 +1,7 @@
 import React from 'react'
 import { apiTMDB } from '../config/api'
 import { Title, Input, Header, Container, ContainerList, ContainerItem, TitleItem } from '../styles';
-import { Image, ScrollView, Text } from 'react-native'
+import { Image, ScrollView, Text, TouchableOpacity } from 'react-native'
 import Icon from "react-native-vector-icons/FontAwesome";
 
 export default class Detalhe extends React.PureComponent {
@@ -33,9 +33,11 @@ export default class Detalhe extends React.PureComponent {
     render() {
         return (
             <Container>
-                <Header>
+                <Header backgroundColor="#867472">
                     <Icon name="chevron-left" size={30}/>
+                    <TouchableOpacity onPress={()=>this.props.navigation.navigate('Home')}>
                     <Title>Voltar</Title>
+                    </TouchableOpacity>
                 </Header>
                 <ScrollView>
                 <Image
