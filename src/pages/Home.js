@@ -1,41 +1,25 @@
 import React from 'react'
-import { Title, Input, Header, Container, ContainerList, ContainerItem, TitleItem, ContainerHeaderTitle,ContainerLoading } from '../styles';
+import { Title, Input, Header, Container, ContainerList, ContainerItem, TitleItem, ContainerHeaderTitle, ContainerLoading } from '../styles';
 import { api } from '../config/api'
 import { FlatList, ScrollView, TouchableOpacity, View, ActivityIndicator } from 'react-native';
 import { Tabs, Tab, TabHeading } from 'native-base';
-
-export default class Home extends React.PureComponent {
+import { connect } from 'react-redux'
+import { setTrending, setAssistidos, setBoxOffice, setAnticipated, setMovies, setIsLoading } from '../config/Redux/actions'
+class Home extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            dataTrending: [],
-            dataAssistidos: [],
-            dataBoxoffice: [],
-            dataAnticipated: [],
-            loading: false
-
         }
     }
 
     _ListarFilmes = async (tipo) => {
+        this.props.dispatch(setIsLoading(true))
         const url = (tipo == 'watched' ? 'movies/' + tipo + '/all' : 'movies/' + tipo + '/?limit=500')
         await api.get(url, {
         })
             .then(response => {
-                console.log(response.data);
-                if (tipo === 'trending') {
-                    this.setState({ dataTrending: response.data });
-                }
-                else if (tipo === 'watched') {
-                    console.log('watched', response.data)
-                    this.setState({ dataAssistidos: response.data });
-                }
-                else if (tipo === 'boxoffice') {
-                    this.setState({ dataBoxoffice: response.data });
-                }
-                else if (tipo === 'anticipated') {
-                    this.setState({ dataAnticipated: response.data, loading: false });
-                }
+                this.props.dispatch(setMovies(response.data,tipo))
+                this.props.dispatch(setIsLoading(false))
             })
 
             .catch(
@@ -45,14 +29,13 @@ export default class Home extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.setState({ loading: true })
+        console.log('PROPS', this.props)
         this._ListarFilmes('trending');
         this._ListarFilmes('watched');
         this._ListarFilmes('boxoffice');
         this._ListarFilmes('anticipated');
     }
     _RenderItem = ({ item }) => {
-        console.log('item', item)
         return (
             <TouchableOpacity onPress={() => this.props.navigation.navigate('Detalhe', item)}>
                 <ContainerItem>
@@ -68,16 +51,15 @@ export default class Home extends React.PureComponent {
 
     }
     _RenderList = (pScreen) => {
-        const { dataTrending, dataAssistidos, dataBoxoffice, dataAnticipated } = this.state
-        console.log('Trending', dataAssistidos);
+        const { trending, watched, boxOffice, anticipated, loading } = this.props
         if (pScreen == 1) {
             return (
-                this.state.loading ? (<ContainerLoading><ActivityIndicator size={40} color="#466A84" /></ContainerLoading>) : (
+                loading ? (<ContainerLoading><ActivityIndicator size={40} color="#466A84" /></ContainerLoading>) : (
                     <ContainerList>
                         <FlatList
                             style={{ width: 500 }}
-                            data={dataTrending}
-                            extraData={dataTrending}
+                            data={trending}
+                            extraData={trending}
                             keyExtractor={item => `${item.movie.ids.trakt}`}
                             renderItem={this._RenderItem}
                             refreshing={true}
@@ -88,32 +70,32 @@ export default class Home extends React.PureComponent {
         else if (pScreen == 2) {
             return (
                 this.state.loading ? (<ContainerLoading><ActivityIndicator size={40} color="#466A84" /></ContainerLoading>) : (
-                <ContainerList>
-                    <FlatList
-                        style={{ width: 500 }}
-                        data={dataAssistidos}
-                        extraData={dataAssistidos}
-                        keyExtractor={item => `${item.movie.ids.trakt}`}
-                        renderItem={this._RenderItem}
-                        refreshing={true}
-                    />
-                </ContainerList>)
+                    <ContainerList>
+                        <FlatList
+                            style={{ width: 500 }}
+                            data={watched}
+                            extraData={watched}
+                            keyExtractor={item => `${item.movie.ids.trakt}`}
+                            renderItem={this._RenderItem}
+                            refreshing={true}
+                        />
+                    </ContainerList>)
             );
         }
         else if (pScreen == 3) {
             return (
                 this.state.loading ? (<ContainerLoading><ActivityIndicator size={40} color="#466A84" /></ContainerLoading>) : (
 
-                <ContainerList>
-                    <FlatList
-                        style={{ width: 500 }}
-                        data={dataBoxoffice}
-                        extraData={dataBoxoffice}
-                        keyExtractor={item => `${item.movie.ids.trakt}`}
-                        renderItem={this._RenderItem}
-                        refreshing={true}
-                    />
-                </ContainerList>
+                    <ContainerList>
+                        <FlatList
+                            style={{ width: 500 }}
+                            data={boxOffice}
+                            extraData={boxOffice}
+                            keyExtractor={item => `${item.movie.ids.trakt}`}
+                            renderItem={this._RenderItem}
+                            refreshing={true}
+                        />
+                    </ContainerList>
                 )
             );
         }
@@ -121,16 +103,16 @@ export default class Home extends React.PureComponent {
             return (
                 this.state.loading ? (<ContainerLoading><ActivityIndicator size={40} color="#466A84" /></ContainerLoading>) : (
 
-                <ContainerList>
-                    <FlatList
-                        style={{ width: 500 }}
-                        data={dataAnticipated}
-                        extraData={dataAnticipated}
-                        keyExtractor={item => `${item.movie.ids.trakt}`}
-                        renderItem={this._RenderItem}
-                        refreshing={true}
-                    />
-                </ContainerList>
+                    <ContainerList>
+                        <FlatList
+                            style={{ width: 500 }}
+                            data={anticipated}
+                            extraData={anticipated}
+                            keyExtractor={item => `${item.movie.ids.trakt}`}
+                            renderItem={this._RenderItem}
+                            refreshing={true}
+                        />
+                    </ContainerList>
                 )
             );
         }
@@ -175,3 +157,15 @@ export default class Home extends React.PureComponent {
         )
     }
 }
+const mapStateToProps = state => {
+    console.log('MapState', state)
+    return {
+        trending: state.trending,
+        watched: state.watched,
+        boxOffice: state.boxOffice,
+        anticipated: state.anticipated,
+        loading: state.isLoading
+    }
+}
+
+export default connect(mapStateToProps)(Home)  

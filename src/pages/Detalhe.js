@@ -2,7 +2,7 @@ import React from 'react'
 import { apiTMDB } from '../config/api'
 import { Title, Input, Header, Container, ContainerList, ContainerItem, TitleItem,ContainerHeaderTitle, ContainerTitle,ContainerLoading } from '../styles';
 import { Image, ScrollView, Text, TouchableOpacity, View,ActivityIndicator } from 'react-native'
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default class Detalhe extends React.PureComponent {
     constructor(props) {
@@ -53,7 +53,7 @@ export default class Detalhe extends React.PureComponent {
                 <Header backgroundColor="#867472">
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Home')}>
 
-                        <Icon name="chevron-left" size={30} />
+                        <Icon name="arrow-back" size={30} />
 
                     </TouchableOpacity>
                     <ContainerHeaderTitle flex={0.9}>
