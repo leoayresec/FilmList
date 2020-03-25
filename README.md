@@ -7,14 +7,20 @@ Projeto de listagem de filmes criado para atender demanda solicitada para teste 
 * https://www.npmjs.com/package/redux
 * https://www.npmjs.com/package/axios
 * https://www.npmjs.com/package/styled-components
+
+## Nota
+- Apenas para informação, utilizamos a API do TMDB para coletar a imagem que não é nos dada pela API do Trakt e aproveitamos a consulta ao TMDB também para obeter as informações de sinopse e genêro.
+
 ##  Instruções de uso
 ### Para rodar o projeto é necessário antes de tudo dar o git clone.
- git clone https://github.com/leoayresec/FilmList.git
+* git clone https://github.com/leoayresec/FilmList.git
 ### Após clonar o projeto em sua máquina local abra a pasta na linha de comando e rode:
- npm install ou yarn install
+
+* npm install ou yarn install
  
 ### Agora que já instalamos o nosso gerenciador de dependências podemos rodar nosso código com o seguinte comando
- npx-react-native run-android
+ 
+* npx-react-native run-android
  
 ### Pronto rápido e prático!
  Caso ocorra algum erro de depência no momento de executar o projeto, pode ser necessário realizar novamente a a isntalação da depedência de pacote Yarn ou NPM, caso você tenha executado npm install no primeiro momento, neste agora, você executará yarn install e vice versa.
